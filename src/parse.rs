@@ -7,7 +7,7 @@ pub struct ParseError;
 
 #[derive(Debug)]
 pub enum Node {
-    Number(String),
+    Number(f64),
     Operation{operator: char, children: Vec<Node>},
 }
 
@@ -30,7 +30,12 @@ impl<'a> Parser<'a> {
         };
 
         match token {
-            lex::Token::Number(c) => Ok(Node::Number(c)),
+            lex::Token::Number(c) => {
+                match c.parse::<f64>() {
+                    Ok(f) => Ok(Node::Number(f)),
+                    Err(_) => Err(ParseError)
+                }
+            },
             lex::Token::OpenParen => self.parse_operation(),
             _ => Err(ParseError),
         }

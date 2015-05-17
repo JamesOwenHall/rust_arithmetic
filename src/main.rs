@@ -1,9 +1,8 @@
 mod lex;
+mod parse;
 
 fn main() {
-    let input = "  (  * + / - -33.3  )   ";
-    let tokenizer = lex::Tokenizer::new(input);
-    for token in tokenizer {
-        println!("{:?}", token);
-    }
+    let input = " (+ -33.3 (- (* 2 3 4) (/ 9 3))) ";
+    let ast = parse::parse(input);
+    println!("{:?}", ast);
 }
